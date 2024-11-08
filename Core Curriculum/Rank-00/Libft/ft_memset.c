@@ -6,9 +6,10 @@ void	*ft_memset(void *ptr, int value, size_t num)
 	size_t			c;
 
 	p = (unsigned char *)ptr;
-	for (c = 0; c < num; c++)
+	while (c < num)
 	{
 		p[c] = (unsigned char)value;
+		c ++;
 	}
 	return (ptr);
 }
