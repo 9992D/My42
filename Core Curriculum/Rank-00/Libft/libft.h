@@ -14,6 +14,6 @@ void	ft_bzero(void *s, size_t n);
 void	*ft_memcpy(void *__restrict__ dest, const void *__restrict__ src,
 			size_t count);
 void	ft_memmove(void *dest, const void *src, size_t count);
-char	*strlcpy(char *string1, const char *string2, size_t count);
+size_t	strlcpy(char *string1, const char *string2, size_t count);
 
 #endif
