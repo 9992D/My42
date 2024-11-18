@@ -2,14 +2,14 @@
 
 char	*ft_strrchr(const char *str, int c)
 {
-	int k;
+	int	k;
 
 	k = 0;
 	while (str[k])
 		k++;
 	while (k >= 0)
 	{
-		if (str[k] == c)
+		if (str[k] == (char)c)
 			return ((char *)&str[k]);
 		k--;
 	}

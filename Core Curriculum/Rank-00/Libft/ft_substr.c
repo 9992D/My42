@@ -1,38 +1,5 @@
 #include "libft.h"
 
-int	ft_strlen(const char *str)
-{
-	int	c;
-
-	c = 0;
-	while (str[c])
-	{
-		c++;
-	}
-	return (c);
-}
-
-char	*ft_strdup(const char *s)
-{
-	size_t	len;
-	size_t	i;
-	char	*dup;
-
-	len = 0;
-	i = 0;
-	while (s[len])
-		len++;
-	dup = (char *)malloc((len + 1) * sizeof(char));
-	if (!dup)
-		return (NULL);
-	while (i <= len)
-	{
-		dup[i] = s[i];
-		i++;
-	}
-	return (dup);
-}
-
 char *ft_substr(char const *s, unsigned int start, size_t len)
 {
     char *substr;

@@ -7,11 +7,11 @@ char	*ft_strchr(const char *str, int c)
 	k = 0;
 	while (str[k])
 	{
-		if (str[k] == c)
+		if (str[k] == (char)c)
 			return ((char *)&str[k]);
 		k++;
 	}
-	if (c == '\0')
+	if ((char)c == '\0')
 		return ((char *)&str[k]);
 	return (NULL);
 }

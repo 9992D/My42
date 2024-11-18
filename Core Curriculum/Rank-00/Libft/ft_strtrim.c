@@ -1,13 +1,4 @@
-#include <stdlib.h>
-
-size_t ft_len(const char *str)
-{
-    size_t len = 0;
-
-    while (str[len])
-        len++;
-    return len;
-}
+#include "libft.h"
 
 int is_it_in(char c, const char *set)
 {
@@ -31,7 +22,7 @@ char *ft_strtrim(char const *s1, char const *set)
 
     if (!s1 || !set)
         return (NULL);
-    len_s1 = ft_len(s1);
+    len_s1 = ft_strlen(s1);
     start = 0;
     while (s1[start] && is_it_in(s1[start], set) == 1)
         start ++;

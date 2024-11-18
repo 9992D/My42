@@ -2,11 +2,5 @@
 
 void ft_bzero(void* s, size_t n)
 {
-    unsigned char *p = (unsigned char *)s;
-    while (n > 0)
-    {
-        *p = 0;
-        n --;
-        p ++;
-    }
+    ft_memset(s, 0, n);
 }
