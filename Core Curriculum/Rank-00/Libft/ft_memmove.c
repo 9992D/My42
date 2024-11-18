@@ -1,30 +1,33 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_memmove.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adenny <adenny@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/18 22:35:16 by adenny            #+#    #+#             */
+/*   Updated: 2024/11/18 23:47:20 by adenny           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 
-void	*ft_memmove(void *dest, const void *src, size_t n)
+void	*ft_memmove(void *dest, const void *src, size_t len)
 {
-	size_t			i;
-	char			j;
-	unsigned char	*d;
-	unsigned char	*s;
+	char	*src2;
+	char	*dest2;
 
-	i = 0;
-	j = 1;
-	d = (unsigned char *)dest;
-	s = (unsigned char *)src;
-	if (!dest && !src)
-		return (NULL);
+	src2 = (char *)src;
+	dest2 = (char *)dest;
 	if (dest > src)
 	{
-		j = -1;
-		d += n - 1;
-		s += n - 1;
+		while (len > 0)
+		{
+			dest2[len - 1] = src2[len - 1];
+			len--;
+		}
 	}
-	while (i < n)
-	{
-		*d = *s;
-		d += j;
-		s += j;
-		i++;
-	}
+	else
+		ft_memcpy(dest, src, len);
 	return (dest);
 }

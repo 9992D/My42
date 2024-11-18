@@ -1,29 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strncmp.c                                       :+:      :+:    :+:   */
+/*   ft_lstmap_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adenny <adenny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/18 22:54:48 by adenny            #+#    #+#             */
-/*   Updated: 2024/11/18 22:54:54 by adenny           ###   ########.fr       */
+/*   Created: 2024/11/18 22:32:54 by adenny            #+#    #+#             */
+/*   Updated: 2024/11/18 23:40:06 by adenny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_strncmp(const char *s1, const char *s2, size_t n)
+t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 {
-	size_t	c;
+	t_list	*newlist;
+	t_list	*node;
 
-	c = 0;
-	if (n == 0)
-		return (0);
-	while (c < n)
+	newlist = NULL;
+	if (lst == NULL || f == NULL || del == NULL)
+		return (NULL);
+	while (lst)
 	{
-		if (s1[c] != s2[c] || s1[c] == '\0' || s2[c] == '\0')
-			return ((unsigned char)s1[c] - (unsigned char)s2[c]);
-		c++;
+		node = malloc(sizeof(*node));
+		if (!node)
+		{
+			ft_lstclear(&newlist, del);
+			return (NULL);
+		}
+		node->next = NULL;
+		node->content = f(lst->content);
+		ft_lstadd_back(&newlist, node);
+		lst = lst->next;
 	}
-	return (0);
+	return (newlist);
 }
