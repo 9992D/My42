@@ -1,13 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_print_digit_utils.c                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adenny <adenny@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/24 15:59:00 by adenny            #+#    #+#             */
+/*   Updated: 2024/11/24 16:22:07 by adenny           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_printf.h"
 
 int	print_digit(long n, int base)
 {
-	char	buffer[65];
-	int		i;
-	int		count;
-	char	symbols[] = "0123456789abcdef";
+	const char	*symbols = "0123456789abcdef";
+	int			count;
 
-	i = 64;
 	count = 0;
 	if (n < 0)
 	{
@@ -16,44 +25,34 @@ int	print_digit(long n, int base)
 		count++;
 		n = -n;
 	}
-	buffer[i--] = '\0';
-	while (n > 0)
+	if (n / base > 0)
 	{
-		buffer[i--] = symbols[n % base];
-		n /= base;
+		count += print_digit(n / base, base);
+		if (count == -1)
+			return (-1);
 	}
-	if (i == 64)
-	{
-		buffer[i--] = '0';
-	}
-	if (safe_write(1, &buffer[i + 1], 64 - i - 1) == -1)
+	if (safe_write(1, &symbols[n % base], 1) == -1)
 		return (-1);
-	count += (64 - i - 1);
-	return (count);
+	return (count + 1);
 }
 
 int	print_unsigned_digit(unsigned long n, int base, int uppercase)
 {
-	char		buffer[65];
-	int			i;
 	const char	*symbols;
+	int			count;
 
+	count = 0;
 	if (uppercase)
 		symbols = "0123456789ABCDEF";
 	else
 		symbols = "0123456789abcdef";
-	i = 64;
-	buffer[i--] = '\0';
-	while (n > 0)
+	if (n / base > 0)
 	{
-		buffer[i--] = symbols[n % base];
-		n /= base;
+		count += print_unsigned_digit(n / base, base, uppercase);
+		if (count == -1)
+			return (-1);
 	}
-	if (i == 64)
-	{
-		buffer[i--] = '0';
-	}
-	if (safe_write(1, &buffer[i + 1], 64 - i - 1) == -1)
+	if (safe_write(1, &symbols[n % base], 1) == -1)
 		return (-1);
-	return (64 - i - 1);
+	return (count + 1);
 }

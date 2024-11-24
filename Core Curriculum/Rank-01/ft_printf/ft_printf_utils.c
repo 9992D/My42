@@ -6,21 +6,11 @@
 /*   By: adenny <adenny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 14:46:56 by adenny            #+#    #+#             */
-/*   Updated: 2024/11/24 14:54:07 by adenny           ###   ########.fr       */
+/*   Updated: 2024/11/24 16:27:20 by adenny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
-
-static int	safe_write(int fd, const void *buf, size_t count)
-{
-	ssize_t	ret;
-
-	ret = write(fd, buf, count);
-	if (ret == -1)
-		return (-1);
-	return ((int)ret);
-}
 
 int	print_char(int c)
 {

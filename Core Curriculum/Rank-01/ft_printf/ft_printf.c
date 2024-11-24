@@ -6,13 +6,13 @@
 /*   By: adenny <adenny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 14:47:03 by adenny            #+#    #+#             */
-/*   Updated: 2024/11/24 14:52:18 by adenny           ###   ########.fr       */
+/*   Updated: 2024/11/24 16:28:32 by adenny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-static int	safe_write(int fd, const void *buf, size_t count)
+int	safe_write(int fd, const void *buf, size_t count)
 {
 	ssize_t	ret;
 
@@ -59,23 +59,12 @@ int	ft_printf(const char *format, ...)
 	va_start(ap, format);
 	while (*format)
 	{
-		if (*format == '%')
-		{
-			format++;
-			if (*format && valid_format(*format))
-				temp = print_format(*format, ap);
-			else
-				temp = -1;
-		}
+		if (*format == '%' && *(++format) && valid_format(*format))
+			temp = print_format(*format, ap);
 		else
-		{
 			temp = safe_write(1, format, 1);
-		}
 		if (temp == -1)
-		{
-			va_end(ap);
-			return (-1);
-		}
+			return (va_end(ap), -1);
 		count += temp;
 		format++;
 	}
