@@ -6,62 +6,92 @@
 /*   By: adenny <adenny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 22:01:29 by adenny            #+#    #+#             */
-/*   Updated: 2024/11/23 22:01:29 by adenny           ###   ########.fr       */
+/*   Updated: 2024/11/24 22:01:29 by adenny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-static int	valid_format(char c)
+static int safe_write(int fd, const void *buf, size_t count)
 {
-	return (c == 'c' || c == 's' || c == 'p' || c == 'd' || c == 'i' || c == 'u'
-		|| c == 'x' || c == 'X' || c == '%');
+    ssize_t ret;
+
+    ret = write(fd, buf, count);
+    if (ret == -1)
+        return -1;
+    return (int)ret;
 }
 
-static int	print_format(char specifier, va_list ap)
+static int valid_format(char c)
 {
-	int	count;
-
-	count = 0;
-	if (specifier == 'c')
-		count += print_char(va_arg(ap, int));
-	else if (specifier == 's')
-		count += print_str(va_arg(ap, char *));
-	else if (specifier == 'p')
-		count += print_pointer(va_arg(ap, void *));
-	else if (specifier == 'd' || specifier == 'i')
-		count += print_digit((long)va_arg(ap, int), 10, 0);
-	else if (specifier == 'u')
-		count += print_unsigned_digit(va_arg(ap, unsigned int), 10, 0);
-	else if (specifier == 'x')
-		count += print_unsigned_digit(va_arg(ap, unsigned int), 16, 0);
-	else if (specifier == 'X')
-		count += print_unsigned_digit(va_arg(ap, unsigned int), 16, 1);
-	else if (specifier == '%')
-		count += write(1, "%", 1);
-	return (count);
+    return (c == 'c' || c == 's' || c == 'p' || c == 'd' || c == 'i' || 
+            c == 'u' || c == 'x' || c == 'X' || c == '%');
 }
 
-int	ft_printf(const char *format, ...)
+static int print_format(char specifier, va_list ap)
 {
-	va_list	ap;
-	int		count;
+    if (specifier == 'c')
+        return print_char(va_arg(ap, int));
+    else if (specifier == 's')
+        return print_str(va_arg(ap, char *));
+    else if (specifier == 'p')
+        return print_pointer(va_arg(ap, void *));
+    else if (specifier == 'd' || specifier == 'i')
+        return print_digit(va_arg(ap, int), 10);
+    else if (specifier == 'u')
+        return print_unsigned_digit(va_arg(ap, unsigned int), 10, 0);
+    else if (specifier == 'x')
+        return print_unsigned_digit(va_arg(ap, unsigned int), 16, 0);
+    else if (specifier == 'X')
+        return print_unsigned_digit(va_arg(ap, unsigned int), 16, 1);
+    else if (specifier == '%')
+        return safe_write(1, "%", 1);
+    return -1;
+}
 
-	count = 0;
-	va_start(ap, format);
-	while (*format)
-	{
-		if (*format == '%')
-		{
-			format++;
-			if (!valid_format(*format))
-				return (-1);
-			count += print_format(*format, ap);
-		}
-		else
-			count += write(1, format, 1);
-		format++;
-	}
-	va_end(ap);
-	return (count);
+int ft_printf(const char *format, ...)
+{
+    va_list ap;
+    int count;
+    int temp;
+
+    count = 0;
+    va_start(ap, format);
+    while (*format)
+    {
+        if (*format == '%')
+        {
+            format++;
+            if (*format == '\0')
+            {
+                va_end(ap);
+                return -1; // Handle edge case: dangling '%' at the end
+            }
+            if (!valid_format(*format))
+            {
+                va_end(ap);
+                return -1; // Handle invalid format specifier
+            }
+            temp = print_format(*format, ap);
+            if (temp == -1)
+            {
+                va_end(ap);
+                return -1;
+            }
+            count += temp;
+        }
+        else
+        {
+            temp = safe_write(1, format, 1);
+            if (temp == -1)
+            {
+                va_end(ap);
+                return -1;
+            }
+            count += temp;
+        }
+        format++;
+    }
+    va_end(ap);
+    return count;
 }
