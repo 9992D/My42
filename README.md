@@ -1,4 +1,6 @@
 # My42
 
 ## Libft ✅
-## Ft_Printf ✅
+## ft_printf ✅
+## get_next_line ✅
+## Born2beroot ✅
