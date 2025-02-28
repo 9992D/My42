@@ -5,116 +5,90 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: adenny <adenny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/29 15:39:59 by adenny            #+#    #+#             */
-/*   Updated: 2024/12/20 03:26:37 by adenny           ###   ########.fr       */
+/*   Created: 2025/02/27 19:43:24 by adenny            #+#    #+#             */
+/*   Updated: 2025/02/27 20:49:18 by adenny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-// Fonction pour calculer la longueur d'une chaîne de caractères
-size_t	ft_strlen(char *s)
+int	ft_strlen(char *s)
 {
-	size_t	i;
+	int	c;
 
-	i = 0;
-	if (!s)
+	c = 0;
+	while (s[c])
+		c++;
+	return (c);
+}
+
+int	is_it_line(t_type *l)
+{
+	int		i;
+	t_type	*current;
+
+	if (l == NULL)
 		return (0);
-	while (s[i])
-		i++;
-	return (i);
-}
-
-// Fonction pour dupliquer une chaîne de caractères
-char	*ft_strdup(char *s1)
-{
-	char	*dest;
-	size_t	i;
-
-	dest = (char *)malloc(ft_strlen(s1) + 1);
-	if (!dest)
-		return (NULL);
+	current = ft_lstlast(l);
 	i = 0;
-	while (s1[i])
+	while (current->content[i])
 	{
-		dest[i] = s1[i];
+		if (current->content[i] == '\n')
+			return (1);
 		i++;
 	}
-	dest[i] = '\0';
-	return (dest);
+	return (0);
 }
 
-// Fonction pour extraire une sous-chaîne d'une chaîne donnée
-char	*ft_substr(char *s, unsigned int start, size_t len)
+t_type	*ft_lstlast(t_type *l)
 {
-	size_t	i;
-	size_t	s_len;
-	char	*str;
+	t_type	*current;
 
-	if (!s)
+	if (l == NULL)
 		return (NULL);
-	s_len = ft_strlen(s);
-	if (start >= s_len)
-		return (ft_strdup(""));
-	if (len > s_len - start)
-		len = s_len - start;
-	str = (char *)malloc((len + 1) * sizeof(char));
-	if (!str)
-		return (NULL);
-	i = 0;
-	while (i < len && s[start + i])
+	current = l;
+	while (current->next)
+		current = current->next;
+	return (current);
+}
+
+void	generate(char **line, t_type *list)
+{
+	int	i;
+	int	len;
+
+	len = 0;
+	while (list)
 	{
-		str[i] = s[start + i];
-		i++;
+		i = 0;
+		while (list->content[i])
+		{
+			if (list->content[i] == '\n')
+			{
+				len++;
+				break ;
+			}
+			len++;
+			i++;
+		}
+		list = list->next;
 	}
-	str[i] = '\0';
-	return (str);
+	*line = malloc(sizeof(char) * (len + 1));
+	if (*line == NULL)
+		return ;
 }
 
-// Fonction pour concaténer deux chaînes de caractères
-char	*ft_strjoin(char *s1, char *s2)
+void	free_all(t_type *list)
 {
-	char	*res;
-	size_t	i;
-	size_t	j;
+	t_type	*current;
+	t_type	*next;
 
-	if (!s1 && !s2)
-		return (NULL);
-	if (!s1)
-		return (ft_strdup(s2));
-	if (!s2)
-		return (ft_strdup(s1));
-	res = (char *)malloc((ft_strlen(s1) + ft_strlen(s2) + 1) * sizeof(char));
-	if (!res)
-		return (NULL);
-	i = 0;
-	j = 0;
-	while (s1[j])
-		res[i++] = s1[j++];
-	j = 0;
-	while (s2[j])
-		res[i++] = s2[j++];
-	res[i] = '\0';
-	return (res);
-}
-
-// Fonction pour trouver la première occurrence d'un caractère dans une chaîne
-char	*ft_strchr(char *s, int c)
-{
-	size_t	i;
-	char	cc;
-
-	if (!s)
-		return (NULL);
-	cc = (char)c;
-	i = 0;
-	while (s[i])
+	current = list;
+	while (current)
 	{
-		if (s[i] == cc)
-			return ((char *)&s[i]);
-		i++;
+		free(current->content);
+		next = current->next;
+		free(current);
+		current = next;
 	}
-	if (s[i] == cc)
-		return ((char *)&s[i]);
-	return (NULL);
 }
