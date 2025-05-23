@@ -6,7 +6,7 @@
 /*   By: adenny <adenny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 15:51:20 by adenny            #+#    #+#             */
-/*   Updated: 2025/03/04 10:48:40 by adenny           ###   ########.fr       */
+/*   Updated: 2025/03/08 10:09:39 by adenny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,3 +36,6 @@ int swap(t_stack *stack);
 int push(t_stack *a, t_stack *b);
 int rotate(t_stack *a);
 int reverse_rotate(t_stack *a);
+void rrr(t_stack *a, t_stack *b);
+void ss(t_stack *a, t_stack *b);
+void rr(t_stack *a, t_stack *b);

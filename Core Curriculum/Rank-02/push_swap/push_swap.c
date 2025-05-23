@@ -6,7 +6,7 @@
 /*   By: adenny <adenny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 15:52:07 by adenny            #+#    #+#             */
-/*   Updated: 2025/03/04 18:13:47 by adenny           ###   ########.fr       */
+/*   Updated: 2025/04/14 16:59:23 by adenny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,11 @@ void radix_sort(t_stack *a, t_stack *b)
     while ((max_num >> max_bits) != 0)
         max_bits++;
 
-    for (int i = 0; i < max_bits; i++)
+    for (int i = 0; i < max_bits; i++) // for
     {
         int size = a->size;
         
-        for (int j = 0; j < size; j++)
+        for (int j = 0; j < size; j++) // for 
         {
             if (((a->top->rank >> i) & 1) == 0)
             {

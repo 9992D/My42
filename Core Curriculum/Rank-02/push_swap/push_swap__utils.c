@@ -6,7 +6,7 @@
 /*   By: adenny <adenny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 16:00:54 by adenny            #+#    #+#             */
-/*   Updated: 2025/03/04 10:48:37 by adenny           ###   ########.fr       */
+/*   Updated: 2025/03/08 10:07:11 by adenny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,4 +152,25 @@ int reverse_rotate(t_stack *a)
     a->bottom->next = NULL;
 
     return (1);
+}
+
+void ss(t_stack *a, t_stack *b)
+{
+    swap(a);
+    swap(b);
+    write(1, "ss\n", 3);
+}
+
+void rr(t_stack *a, t_stack *b)
+{
+    rotate(a);
+    rotate(b);
+    write(1, "rr\n", 3);
+}
+
+void rrr(t_stack *a, t_stack *b)
+{
+    reverse_rotate(a);
+    reverse_rotate(b);
+    write(1, "rrr\n", 4);
 }
