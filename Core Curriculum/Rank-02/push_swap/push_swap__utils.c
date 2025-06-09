@@ -6,7 +6,7 @@
 /*   By: adenny <adenny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 16:00:54 by adenny            #+#    #+#             */
-/*   Updated: 2025/05/28 11:22:26 by adenny           ###   ########.fr       */
+/*   Updated: 2025/06/09 23:17:58 by adenny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,25 +73,21 @@ int	find_index_for_chunk(t_stack *a, int boundary)
 	return (-1);
 }
 
-int	has_duplicates(t_stack *a)
+int	run_push_swap(t_stack *a, t_stack *b)
 {
-	t_node	*current;
-	t_node	*runner;
-
-	current = a->top;
-	while (current)
+	if (is_sorted(a))
+		return (exit_and_cleanup(a, b, 0));
+	rank_init(a);
+	if (a->size == 2)
 	{
-		runner = current->next;
-		while (runner)
-		{
-			if (current->value == runner->value)
-			{
-				write(1, "Error\n", 6);
-				return (1);
-			}
-			runner = runner->next;
-		}
-		current = current->next;
+		swap(a);
+		write(1, "sa\n", 3);
 	}
-	return (0);
+	else if (a->size == 3)
+		sort_three(a);
+	else if (a->size <= 5)
+		sort_five(a, b);
+	else
+		chunk_sort(a, b);
+	return (exit_and_cleanup(a, b, 0));
 }

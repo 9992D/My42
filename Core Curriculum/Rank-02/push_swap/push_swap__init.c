@@ -6,7 +6,7 @@
 /*   By: adenny <adenny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 07:05:05 by adenny            #+#    #+#             */
-/*   Updated: 2025/05/28 13:14:01 by adenny           ###   ########.fr       */
+/*   Updated: 2025/05/28 15:06:34 by adenny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,20 +51,21 @@ t_stack	*init_node_value(t_stack *stack, int value)
 
 void	rank_init(t_stack *a)
 {
-	t_node *current = a->top;
+	t_node	*current;
+	int		rank;
+	t_node	*tmp;
 
+	current = a->top;
 	while (current)
 	{
-		int rank = 0;
-		t_node *tmp = a->top;
-
+		rank = 0;
+		tmp = a->top;
 		while (tmp)
 		{
 			if (tmp->value < current->value)
 				rank++;
 			tmp = tmp->next;
 		}
-
 		current->rank = rank;
 		current = current->next;
 	}

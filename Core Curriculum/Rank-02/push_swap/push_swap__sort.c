@@ -6,7 +6,7 @@
 /*   By: adenny <adenny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:09:20 by adenny            #+#    #+#             */
-/*   Updated: 2025/05/28 11:18:20 by adenny           ###   ########.fr       */
+/*   Updated: 2025/05/28 15:11:17 by adenny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,32 @@ void	init_chunk_params(t_stack *a, int *num_chunks, double *d_chunk_size)
 	*d_chunk_size = (double)total / *num_chunks;
 }
 
+void	rotate_to_index(t_stack *a, int index)
+{
+	int	i;
+
+	i = 0;
+	if (index <= a->size / 2)
+	{
+		while (i < index)
+		{
+			rotate(a);
+			write(1, "ra\n", 3);
+			i++;
+		}
+	}
+	else
+	{
+		i = 0;
+		while (i < a->size - index)
+		{
+			reverse_rotate(a);
+			write(1, "rra\n", 4);
+			i++;
+		}
+	}
+}
+
 void	push_next_chunk_element(t_stack *a, t_stack *b, int boundary,
 		int half_boundary)
 {
@@ -32,18 +58,7 @@ void	push_next_chunk_element(t_stack *a, t_stack *b, int boundary,
 	index = find_index_for_chunk(a, boundary);
 	if (index != -1)
 	{
-		if (index <= a->size / 2)
-			for (int i = 0; i < index; i++)
-			{
-				rotate(a);
-				write(1, "ra\n", 3);
-			}
-		else
-			for (int i = 0; i < a->size - index; i++)
-			{
-				reverse_rotate(a);
-				write(1, "rra\n", 4);
-			}
+		rotate_to_index(a, index);
 		push(a, b);
 		write(1, "pb\n", 3);
 		if (b->size > 1 && b->top->rank < half_boundary)
@@ -59,11 +74,27 @@ void	push_next_chunk_element(t_stack *a, t_stack *b, int boundary,
 	}
 }
 
+void	compute_boundaries(int *params, double d_chunk_size, int *boundary,
+		int *half_boundary)
+{
+	if (params[0] < params[1])
+	{
+		*boundary = (int)(params[0] * d_chunk_size);
+		*half_boundary = (int)(params[0] * d_chunk_size - (d_chunk_size / 2));
+	}
+	else
+	{
+		*boundary = params[2] - 1;
+		*half_boundary = params[2] - 1;
+	}
+}
+
 void	push_chunks_to_b(t_stack *a, t_stack *b, int num_chunks,
 		double d_chunk_size)
 {
 	int	current_chunk;
 	int	total;
+	int	params[3];
 	int	boundary;
 	int	half_boundary;
 
@@ -71,59 +102,13 @@ void	push_chunks_to_b(t_stack *a, t_stack *b, int num_chunks,
 	total = a->size;
 	while (a->size > 0)
 	{
-		boundary = (current_chunk < num_chunks) ? (int)(current_chunk
-				* d_chunk_size) : (total - 1);
-		half_boundary = (current_chunk < num_chunks) ? (int)(current_chunk
-				* d_chunk_size - (d_chunk_size / 2)) : (total - 1);
+		params[0] = current_chunk;
+		params[1] = num_chunks;
+		params[2] = total;
+		compute_boundaries(params, d_chunk_size, &boundary, &half_boundary);
 		push_next_chunk_element(a, b, boundary, half_boundary);
 		if (b->size >= (int)(current_chunk * d_chunk_size)
 			&& current_chunk < num_chunks)
 			current_chunk++;
 	}
-}
-
-void	push_back_to_a(t_stack *a, t_stack *b)
-{
-	int		max_rank = -1, pos = 0, max_pos;
-	t_node	*tmp;
-
-	while (b->size > 0)
-	{
-		max_rank = -1, pos = 0, max_pos = 0;
-		tmp = b->top;
-		while (tmp)
-		{
-			if (tmp->rank > max_rank)
-			{
-				max_rank = tmp->rank;
-				max_pos = pos;
-			}
-			pos++;
-			tmp = tmp->next;
-		}
-		if (max_pos <= b->size / 2)
-			for (int i = 0; i < max_pos; i++)
-			{
-				rotate(b);
-				write(1, "rb\n", 3);
-			}
-		else
-			for (int i = 0; i < b->size - max_pos; i++)
-			{
-				reverse_rotate(b);
-				write(1, "rrb\n", 4);
-			}
-		push(b, a);
-		write(1, "pa\n", 3);
-	}
-}
-
-void	chunk_sort(t_stack *a, t_stack *b)
-{
-	int		num_chunks;
-	double	d_chunk_size;
-
-	init_chunk_params(a, &num_chunks, &d_chunk_size);
-	push_chunks_to_b(a, b, num_chunks, d_chunk_size);
-	push_back_to_a(a, b);
 }

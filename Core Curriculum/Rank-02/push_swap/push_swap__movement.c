@@ -6,7 +6,7 @@
 /*   By: adenny <adenny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:15:31 by adenny            #+#    #+#             */
-/*   Updated: 2025/05/28 11:18:16 by adenny           ###   ########.fr       */
+/*   Updated: 2025/05/28 15:12:04 by adenny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,17 +71,16 @@ int	rotate(t_stack *a)
 
 int	reverse_rotate(t_stack *a)
 {
+	t_node	*new_bottom;
+
 	if (a->size < 2)
 		return (0);
-
-	t_node *new_bottom = a->top;
+	new_bottom = a->top;
 	while (new_bottom->next != a->bottom)
 		new_bottom = new_bottom->next;
-
 	a->bottom->next = a->top;
 	a->top = a->bottom;
 	a->bottom = new_bottom;
 	a->bottom->next = NULL;
-
 	return (1);
 }
