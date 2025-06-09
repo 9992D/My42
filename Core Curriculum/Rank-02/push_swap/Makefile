@@ -1,9 +1,9 @@
 NAME = push_swap
 
-CC = gcc
+CC = clang
 CFLAGS = -Wall -Wextra -Werror
 
-SRCS = push_swap.c push_swap__utils.c push_swap__init.c
+SRCS = push_swap.c push_swap__utils.c push_swap__init.c push_swap__sort.c push_swap__movement.c push_swap__checker_main.c
 OBJS = $(SRCS:.c=.o)
 
 all: $(NAME)

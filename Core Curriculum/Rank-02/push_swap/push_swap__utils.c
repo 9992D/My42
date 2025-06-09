@@ -6,7 +6,7 @@
 /*   By: adenny <adenny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 16:00:54 by adenny            #+#    #+#             */
-/*   Updated: 2025/03/04 10:48:37 by adenny           ###   ########.fr       */
+/*   Updated: 2025/05/28 11:22:26 by adenny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,118 +38,60 @@ int	ft_atoi(const char *str)
 	return ((int)(result * sign));
 }
 
-void free_stack(t_stack *stack)
+void	free_stack(t_stack *stack)
 {
-    if (!stack)
-        return;
-        
-    t_node *current = stack->top;
-    t_node *tmp;
+	t_node	*current;
+	t_node	*tmp;
 
-    while (current)
-    {
-        tmp = current;
-        current = current->next;
-        free(tmp);
-    }
-    free(stack);
-    return;
+	if (!stack)
+		return ;
+	current = stack->top;
+	while (current)
+	{
+		tmp = current;
+		current = current->next;
+		free(tmp);
+	}
+	free(stack);
+	return ;
 }
 
-/*
-Goal: swap the first two elements at the top of stack. Do nothing if there is only one or no elements.
-Return: 1 if swap is successful, 0 otherwise.
-*/
-
-int swap(t_stack *stack)
+int	find_index_for_chunk(t_stack *a, int boundary)
 {
-    if (stack->size < 2)
-        return (0);
+	int		index;
+	t_node	*current;
 
-    t_node *first = stack->top;
-    t_node *second = first->next;
-
-    first->next = second->next;
-    second->next = first;
-    stack->top = second;
-
-    if (stack->size == 2)
-        stack->bottom = first;
-
-    return (1);
+	index = 0;
+	current = a->top;
+	while (current)
+	{
+		if (current->rank <= boundary)
+			return (index);
+		index++;
+		current = current->next;
+	}
+	return (-1);
 }
 
-/*
-Goal: push the first element at the top of stack a to the top of stack b. Do nothing if stack a is empty.
-Return: 1 if push is successful, 0 otherwise.
-*/
-
-int push(t_stack *a, t_stack *b)
+int	has_duplicates(t_stack *a)
 {
-    if (a->size == 0)
-        return (0);
+	t_node	*current;
+	t_node	*runner;
 
-    t_node *top_a = a->top; 
-    a->top = top_a->next; 
-
-    if (b->size == 0) 
-    {
-        b->top = top_a;
-        b->bottom = top_a;
-        top_a->next = NULL;
-    }
-    else
-    {
-        top_a->next = b->top;
-        b->top = top_a;
-    }
-
-    a->size--;
-    b->size++;
-
-    if (a->size == 0)
-        a->bottom = NULL;
-
-    return (1);
-}
-
-/*
-Goal: rotate the stack by moving up all elements by one. The first element becomes the last one.
-Return: 1 if rotate is successful, 0 otherwise.
-*/
-
-int rotate(t_stack *a)
-{
-    if (a->size < 2)
-        return (0);
-
-    t_node *top_a = a->top;
-    a->top = top_a->next;
-    a->bottom->next = top_a;
-    a->bottom = top_a; 
-    a->bottom->next = NULL;
-
-    return (1);
-}
-
-/*
-Goal: reverse rotate the stack by moving down all elements by one. The last element becomes the first one.
-Return: 1 if reverse rotate is successful, 0 otherwise. 
-*/
-
-int reverse_rotate(t_stack *a)
-{
-    if (a->size < 2)
-        return (0);
-
-    t_node *new_bottom = a->top;
-    while (new_bottom->next != a->bottom)
-        new_bottom = new_bottom->next;
-
-    a->bottom->next = a->top;
-    a->top = a->bottom;
-    a->bottom = new_bottom;
-    a->bottom->next = NULL;
-
-    return (1);
+	current = a->top;
+	while (current)
+	{
+		runner = current->next;
+		while (runner)
+		{
+			if (current->value == runner->value)
+			{
+				write(1, "Error\n", 6);
+				return (1);
+			}
+			runner = runner->next;
+		}
+		current = current->next;
+	}
+	return (0);
 }
