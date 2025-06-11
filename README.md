@@ -7,3 +7,4 @@
 ## pipex ✅
 ## Exam Rank 02 ✅
 ## fract'ol ✅
+## push_swap ✅
