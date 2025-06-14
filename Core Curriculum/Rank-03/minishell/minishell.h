@@ -29,6 +29,8 @@ typedef enum e_type
     REDIR_OUT,
     APPEND,
     DOLLAR,
+    QUOTE,
+    DOUBLE_QUOTE,
     UNKNOWN,
 }	t_type;
 

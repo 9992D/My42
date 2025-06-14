@@ -17,6 +17,10 @@ t_type get_character_type(char c)
 		return REDIR_OUT;
 	else if (c == '$')
 		return DOLLAR;
+	else if (c == 39)
+		return QUOTE;
+	else if (c == 34)
+		return DOUBLE_QUOTE;
 	return UNKNOWN;
 }
 
