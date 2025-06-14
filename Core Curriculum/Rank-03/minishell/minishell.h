@@ -28,6 +28,7 @@ typedef enum e_type
     HEREDOC,
     REDIR_OUT,
     APPEND,
+    DOLLAR,
     UNKNOWN,
 }	t_type;
 
@@ -49,7 +50,6 @@ typedef struct s_token
 // Utils
 int ft_len_without_spaces(const char *str);
 int	ft_isspace(char c);
-int is_word_char(char c);
 
 // Character functions
 t_type get_character_type(char c);
@@ -61,7 +61,7 @@ t_character *build_token_list(const char *str);
 void free_token_list(t_token *head);
 int get_word_len(t_character *chars, int word);
 char *build_token_string(t_character *chars, int len);
-t_type get_operator_token_type(t_character *chars, int len);
+t_type get_operator_token_type(t_character *chars);
 t_token *convert_to_tokens(t_character *chars);
 
 #endif

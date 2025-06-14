@@ -38,14 +38,11 @@ char *build_token_string(t_character *chars, int len)
 	return str;
 }
 
-t_type get_operator_token_type(t_character *chars, int len)
+t_type get_operator_token_type(t_character *chars)
 {
-	if (len == 2)
-	{
-		if (chars->c == '<') return HEREDOC;
-		if (chars->c == '>') return APPEND;
-		if (chars->c == '|') return OR;
-		if (chars->c == '&') return AND;
-	}
+	if (chars->c == '<') return HEREDOC;
+	if (chars->c == '>') return APPEND;
+	if (chars->c == '|') return OR;
+	if (chars->c == '&') return AND;
 	return chars->type;
 }

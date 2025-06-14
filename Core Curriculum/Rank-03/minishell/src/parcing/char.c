@@ -15,6 +15,8 @@ t_type get_character_type(char c)
 		return REDIR_IN;
 	else if (c == '>')
 		return REDIR_OUT;
+	else if (c == '$')
+		return DOLLAR;
 	return UNKNOWN;
 }
 

@@ -84,7 +84,7 @@ t_token *convert_to_tokens(t_character *chars)
 		if (chars->type == LITERAL)
 			new_token->type = LITERAL;
 		else if (len == 2)
-			new_token->type = get_operator_token_type(chars, len);
+			new_token->type = get_operator_token_type(chars);
 		else if (len > 2)
 			new_token->type = UNKNOWN;
 		else
