@@ -35,6 +35,7 @@ typedef struct s_character
 {
     char			c;
     t_type			type;
+    int word;
     struct s_character *next;
 } t_character;
 
@@ -42,17 +43,25 @@ typedef struct s_token
 {
     char *str;
     t_type type;
-    struct s_str *next;
+    struct s_token *next;
 } t_token;
 
 // Utils
 int ft_len_without_spaces(const char *str);
 int	ft_isspace(char c);
+int is_word_char(char c);
 
 // Character functions
 t_type get_character_type(char c);
 void	free_character_list(t_character *head);
 int malloc_structure_character(t_character **t, int n);
 t_character *build_token_list(const char *str);
+
+// Token functions
+void free_token_list(t_token *head);
+int get_word_len(t_character *chars, int word);
+char *build_token_string(t_character *chars, int len);
+t_type get_operator_token_type(t_character *chars, int len);
+t_token *convert_to_tokens(t_character *chars);
 
 #endif

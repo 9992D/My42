@@ -1,10 +1,11 @@
-#include "minishell.h"
+#include "../../minishell.h"
 
 t_type get_character_type(char c)
 {
 	if ((c >= 'a' && c <= 'z') || 
 	    (c >= 'A' && c <= 'Z') || 
-	    (c >= '0' && c <= '9'))
+	    (c >= '0' && c <= '9')||
+		c == '.' || c == '/' || c == '_')
 		return LITERAL;
 	else if (c == '|')
 		return PIPE;
@@ -24,9 +25,6 @@ void	free_character_list(t_character *head)
 	while (head)
 	{
 		tmp = head->next;
-		if (head->type)
-			free(head->type);
-
 		free(head);
 		head = tmp;
 	}
@@ -45,8 +43,8 @@ int malloc_structure_character(t_character **t, int n)
 			free_character_list(head);
 			return 0;
 		}
-		new->c = NULL;
-		new->type = NULL;
+		new->c = 0;
+		new->type = UNKNOWN;
 		new->next = NULL;
 		if (!head)
 			head = new;
