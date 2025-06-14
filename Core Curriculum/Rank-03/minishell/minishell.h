@@ -17,25 +17,42 @@
 #include <sys/ioctl.h>
 #include <term.h>
 
-typedef enum e_token_type
+typedef enum e_type
 {
 	LITERAL,
     PIPE,
-    AND,
     OR,
+    AMPERSAND,
+    AND,
     REDIR_IN,
+    HEREDOC,
     REDIR_OUT,
+    APPEND,
     UNKNOWN,
-}	t_token_type;
+}	t_type;
+
+typedef struct s_character
+{
+    char			c;
+    t_type			type;
+    struct s_character *next;
+} t_character;
 
 typedef struct s_token
 {
-	char			c;
-	t_token_type	type;
-	struct s_token *next;
+    char *str;
+    t_type type;
+    struct s_str *next;
 } t_token;
 
+// Utils
 int ft_len_without_spaces(const char *str);
 int	ft_isspace(char c);
+
+// Character functions
+t_type get_character_type(char c);
+void	free_character_list(t_character *head);
+int malloc_structure_character(t_character **t, int n);
+t_character *build_token_list(const char *str);
 
 #endif
