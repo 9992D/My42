@@ -1,7 +1,7 @@
-NAME = minishell
-
-CC = cc
-CFLAGS = -Wall -Wextra -Werror
+NAME     := minishell
+CC       := cc
+CFLAGS   := -Wall -Wextra -Werror
+LDFLAGS  := -lreadline
 
 SRCS = minishell.c src/parcing/char.c src/parcing/utils.c src/parcing/tokenize.c src/parcing/token.c src/parcing/norme/norme__char.c src/parcing/norme/norme__token.c
 OBJS = $(SRCS:.c=.o)
@@ -9,7 +9,7 @@ OBJS = $(SRCS:.c=.o)
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(LDFLAGS)
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
