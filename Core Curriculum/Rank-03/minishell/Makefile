@@ -3,7 +3,7 @@ NAME = minishell
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
 
-SRCS = minishell.c src/parcing/char.c src/parcing/utils.c src/parcing/tokenize.c src/parcing/token.c
+SRCS = minishell.c src/parcing/char.c src/parcing/utils.c src/parcing/tokenize.c src/parcing/token.c src/parcing/norme/norme__char.c src/parcing/norme/norme__token.c
 OBJS = $(SRCS:.c=.o)
 
 all: $(NAME)
