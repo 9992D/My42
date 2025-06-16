@@ -1,21 +1,38 @@
-NAME = minishell
+NAME     := minishell
+CC       := cc
+CFLAGS   := -Wall -Wextra -Werror
+LDFLAGS  := -lreadline
 
-CC = cc
-CFLAGS = -Wall -Wextra -Werror
+SRCS := \
+	minishell.c \
+	src/parcing/char.c \
+	src/parcing/utils.c \
+	src/parcing/tokenize.c \
+	src/parcing/token.c \
+	src/parcing/norme/norme__char.c \
+	src/parcing/norme/norme__token.c \
+	arthur_part/init.c \
+	arthur_part/free.c \
+	arthur_part/utils.c \
+	arthur_part/parse_tokens.c \
+	arthur_part/cmd.c
 
-SRCS = minishell.c src/parcing/char.c src/parcing/utils.c src/parcing/tokenize.c src/parcing/token.c src/parcing/norme/norme__char.c src/parcing/norme/norme__token.c
-OBJS = $(SRCS:.c=.o)
+OBJDIR := obj
+OBJS   := $(SRCS:%.c=$(OBJDIR)/%.o)
+
+.PHONY: all clean fclean re
 
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) -o $@ $(LDFLAGS)
 
-%.o: %.c
+$(OBJDIR)/%.o: %.c
+	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(OBJS)
+	rm -rf $(OBJDIR)
 
 fclean: clean
 	rm -f $(NAME)

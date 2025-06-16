@@ -53,6 +53,7 @@ typedef struct s_token
 typedef struct s_redir {
     t_type  type;
     char    *target;
+    int     error;
     struct  s_redir *next;
 } t_redir;
 
@@ -72,7 +73,8 @@ typedef struct s_command {
     t_type_cmd          cmd;
     char                **args;                          
     t_redir             *redirs;                   
-    int                 has_pipe_out;                 
+    int                 has_pipe_out; 
+    int                 error;                
     struct s_command    *next;
     struct s_command    *previous; 
 } t_command;
@@ -118,11 +120,11 @@ t_type  get_operator_token_type(t_character *chars);
 t_token *convert_to_tokens(t_character *chars);
 
 // init.c 
+t_command *create_new_command(void);
 t_command *init_struct_globale(t_token *token_list);
 
 // parse_token.c
-void        check_redirs(t_token *token_list);
-void        parse_token(t_token *token_list);
+void        parse_token(t_command *cmd, t_token *token_list);
 
 // utils.c
 void        *lst_last_node(void *head);
@@ -133,6 +135,11 @@ t_type_cmd  identify_builtin(const char *str);
 
 // free.c
 void        cleanup (t_command *cmd);
+void        cleanall_exit(t_command *cmd, t_token *token_list);
+
+// cmd.c
+void save_all(t_command *cmd, t_token *token_list);
+
 
 
 #endif

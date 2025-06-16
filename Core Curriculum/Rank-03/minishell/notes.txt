@@ -82,3 +82,21 @@ int     tgetnum(const char *id);                              // lit une capacit
 char   *tgetstr(const char *id, char **area);                 // lit une séquence de contrôle ou NULL
 char   *tgoto(const char *cap, int col, int row);             // génère la séquence de positionnement
 int     tputs(const char *str, int affcnt, int (*putc)(int)); // affiche `str` via `putc`
+
+// remonter l'erreur
+// target de redirection non pris en compte apres un pipe (surement print_command_structure)
+// signe dollar
+
+Test objectif :
+
+
+- erreur immediate si (fonction clean_all_exit): -> OK
+ minishell$ '
+ minishell$ "
+ minishell$ |
+
+- remonter plus tard si redir 0 target (booleen dans le noeud en question)
+
+- nouveau type enum VARIABLE si :
+minishell$ " '$USER' " -> $USER devient type VARIABLE
+minishell$ ' "$USER" ' -> $USER reste type LITERAL
