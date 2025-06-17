@@ -13,6 +13,12 @@ void *lst_last_node(void *head)
     return curr;
 }
 
+int is_variable()
+{
+    
+    return 1;
+}
+
 int is_redir (t_type type)
 {
     if(type == HEREDOC || type == APPEND || type == REDIR_IN || type == REDIR_OUT)

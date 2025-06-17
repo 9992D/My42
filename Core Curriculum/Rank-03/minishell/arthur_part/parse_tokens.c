@@ -52,4 +52,3 @@ void parse_token(t_command *cmd, t_token *token_list)
 
     check_dollars(token_list);
 }
-

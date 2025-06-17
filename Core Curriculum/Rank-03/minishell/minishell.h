@@ -16,6 +16,7 @@
 #include <termios.h>
 #include <sys/ioctl.h>
 #include <term.h>
+#include <stddef.h>
 
 typedef enum e_type
 {
@@ -28,7 +29,7 @@ typedef enum e_type
     HEREDOC,
     REDIR_OUT,
     APPEND,
-    DOLLAR,
+    DOLLAR, //plutot que quote - double quote - dollar il faudrait un type variable / un seul token si quote
     QUOTE,
     DOUBLE_QUOTE,
     UNKNOWN,
@@ -39,7 +40,7 @@ typedef struct s_character
 {
     char			c;
     t_type			type;
-    int word;
+    int             word;
     struct s_character *next;
 } t_character;
 
@@ -59,7 +60,7 @@ typedef struct s_redir {
 
 typedef enum e_cmd
 {
-    NOT_BUILTIN,
+    CMD_NONE,
 	T_ECHO,
     T_CD,
     T_PWD,
@@ -67,14 +68,21 @@ typedef enum e_cmd
     T_UNSET,
     T_ENV,
     T_EXIT,
+    NOT_BUILTIN,
 }	t_type_cmd;
 
+typedef struct s_arg
+{
+    char            *str;
+    t_type          type;
+} t_arg;
+
 typedef struct s_command {
-    t_type_cmd          cmd;
-    char                **args;                          
-    t_redir             *redirs;                   
+    t_type_cmd          cmd;          // enum de la commande (si pas trouve alors = NOT_BUILTIN)
+    t_arg               *args;        // tableau de t_arg (execve attend un tableau char *argv[] terminé par NULL)
+    size_t              nb_args;
+    t_redir             *redirs;      // liste chainee de redirection (noeud contenant error si pas de target, la target est enregistree dans le noeud)             
     int                 has_pipe_out; 
-    int                 error;                
     struct s_command    *next;
     struct s_command    *previous; 
 } t_command;

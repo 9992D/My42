@@ -83,20 +83,14 @@ char   *tgetstr(const char *id, char **area);                 // lit une séquen
 char   *tgoto(const char *cap, int col, int row);             // génère la séquence de positionnement
 int     tputs(const char *str, int affcnt, int (*putc)(int)); // affiche `str` via `putc`
 
-// remonter l'erreur
-// target de redirection non pris en compte apres un pipe (surement print_command_structure)
-// signe dollar
 
 Test objectif :
 
+->besoin que le pre-traitement fasse : 1 seul token si il y a des quotes | enregistrer en tant que variable si dollars + regles
 
-- erreur immediate si (fonction clean_all_exit): -> OK
- minishell$ '
- minishell$ "
- minishell$ |
+minishell$ " '$USER' " -> $USER reste type VARIABLE
+minishell$ ' "$USER" ' -> $USER devient LITERAL
 
-- remonter plus tard si redir 0 target (booleen dans le noeud en question)
+->parser si quotes ouvertes et jamais fermees quitter
 
-- nouveau type enum VARIABLE si :
-minishell$ " '$USER' " -> $USER devient type VARIABLE
-minishell$ ' "$USER" ' -> $USER reste type LITERAL
+ 

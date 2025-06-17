@@ -31,7 +31,7 @@ static void add_redir(t_command *cmd, t_type type, char *target)
 
 static int add_cmd(t_command *cmd, char *str)
 {
-    if (cmd->cmd == NOT_BUILTIN)
+    if (cmd->cmd == CMD_NONE)
     {
         cmd->cmd = identify_builtin(str);
         return 1;
@@ -39,35 +39,29 @@ static int add_cmd(t_command *cmd, char *str)
     return 0;
 }
 
-static void add_argument(t_command *cmd, char *arg)
+int add_argument(t_command *cmd, t_type type, const char *str)
 {
-    int i = 0;
-    int j = 0;
-    char **new_args;
+    t_arg  *new_args;
+    char   *dup;
 
-    if (cmd->cmd == NOT_BUILTIN)
-        return;
+    dup = strdup(str);
+    if (!dup)
+        return 0;  
 
-    if (!cmd->args)
+    new_args = realloc(cmd->args, sizeof *new_args * (cmd->nb_args + 1));
+    if (!new_args)
     {
-        cmd->args = malloc(sizeof(char *) * 2);
-        cmd->args[0] = strdup(arg);
-        cmd->args[1] = NULL;
-        return;
+        free(dup);    
+        return 0;
     }
-    while (cmd->args[i])
-        i++;
-    new_args = malloc(sizeof(char *) * (i + 2));
-    while (j < i) 
-    { 
-        new_args[j] = cmd->args[j];
-        j++;
-    }
-    new_args[i] = strdup(arg);
-    new_args[i + 1] = NULL;
-    free(cmd->args);
+
     cmd->args = new_args;
+    cmd->args[cmd->nb_args].type = type;
+    cmd->args[cmd->nb_args].str  = dup;
+    cmd->nb_args++;
+    return 1;
 }
+
 
 void save_all(t_command *cmd, t_token *token_list)
 {
@@ -100,16 +94,81 @@ void save_all(t_command *cmd, t_token *token_list)
             }
             continue;
         }
+        // si je tombe sur un literal et que cest le premier noeud -> commande (que ce soit une vraie ou un NOT_BUITLIN)
+        // apres je ne rentre plus dans cette condition et je vais ajouter tout ce qui est autre que redirection et opeator dans
+        // mes arguments 
 
-        else if (token_list->type == LITERAL)
+        else if (token_list->type == LITERAL || token_list->type == DOLLAR)
         {
-            if (add_cmd(current, token_list->str))
+            if (current->cmd == CMD_NONE)
             {
-                token_list = token_list->next;
-                continue;
+                if (!add_cmd(current, token_list->str))
+                    cleanall_exit(current, token_list);
             }
-            add_argument(current, token_list->str);
+            else
+            {
+                if (!add_argument(current, token_list->type, token_list->str))
+                    cleanall_exit(current, token_list);
+            }
+            token_list = token_list->next;
         }
-        token_list = token_list->next;
+
+        else 
+        {
+            if(!add_argument(current, token_list->type, token_list->str))
+                cleanall_exit(current, token_list);
+            token_list = token_list->next;
+            continue;
+        }
+
     }
 }
+
+
+
+        // else if (token_list->type == LITERAL)
+        // {
+        //     if (add_cmd(current, token_list->str))
+        //     {
+        //         token_list = token_list->next;
+        //         continue;
+        //     }
+        //     add_argument(current, token_list->str);
+        // }
+
+        // else
+        //     add_argument(current, token_list->str);
+
+        // token_list = token_list->next;
+
+
+
+// static void add_argument(t_command *cmd, char *arg)
+// {
+//     int i = 0;
+//     int j = 0;
+//     char **new_args;
+
+//     if (cmd->cmd == NOT_BUILTIN)
+//         return;
+
+//     if (!cmd->args)
+//     {
+//         cmd->args = malloc(sizeof(char *) * 2);
+//         cmd->args[0] = strdup(arg);
+//         cmd->args[1] = NULL;
+//         return;
+//     }
+//     while (cmd->args[i])
+//         i++;
+//     new_args = malloc(sizeof(char *) * (i + 2));
+//     while (j < i) 
+//     { 
+//         new_args[j] = cmd->args[j];
+//         j++;
+//     }
+//     new_args[i] = strdup(arg);
+//     new_args[i + 1] = NULL;
+//     free(cmd->args);
+//     cmd->args = new_args;
+// }

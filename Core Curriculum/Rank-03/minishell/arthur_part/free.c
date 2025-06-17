@@ -13,28 +13,29 @@ static void free_redir(t_redir *redir)
     }
 }
 
-static void free_args(char **args)
+void free_args(t_arg *args, size_t nb_args)
 {
-    int i = 0;
+    size_t i;
 
+    i = 0;
     if (!args)
         return;
-    while (args[i])
-    {
-        free(args[i]);
-        i++;
-    }
+
+    while (i < nb_args)
+        free(args[i++].str);
+
     free(args);
 }
 
 void cleanup(t_command *cmd)
 {
     t_command *current = cmd;
+    t_command *next;
 
     while (current)
     {
-        t_command *next = current->next;
-        free_args(current->args);
+        next = current->next;
+        free_args(current->args, current->nb_args);
         free_redir(current->redirs);
         free(current);
         current = next;
