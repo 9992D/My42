@@ -6,7 +6,7 @@
 /*   By: adenny <adenny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/15 23:16:34 by adenny            #+#    #+#             */
-/*   Updated: 2025/06/15 23:34:32 by adenny           ###   ########.fr       */
+/*   Updated: 2025/06/17 17:28:30 by adenny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ int	handle_quote_inner(const char **str, t_charbuilder *b, char quote)
 {
 	t_character	*node;
 
-	b->state.word++;
 	while (**str && **str != quote)
 	{
 		node = add_char_node(b, **str, LITERAL, b->state.word);
@@ -45,7 +44,6 @@ int	handle_quote_inner(const char **str, t_charbuilder *b, char quote)
 	}
 	if (**str == quote)
 	{
-		b->state.word++;
 		node = add_char_node(b, quote, get_character_type(quote),
 				b->state.word);
 		if (!node)

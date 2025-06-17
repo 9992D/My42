@@ -6,7 +6,7 @@
 /*   By: adenny <adenny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/15 23:13:49 by adenny            #+#    #+#             */
-/*   Updated: 2025/06/15 23:36:22 by adenny           ###   ########.fr       */
+/*   Updated: 2025/06/17 17:28:33 by adenny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ t_token	*create_token_from_chars(t_character *chars, int word_id)
 		return (NULL);
 	}
 	if (chars->type == LITERAL)
+		new_token->type = LITERAL;
+	else if (chars->type == QUOTE || chars->type == DOUBLE_QUOTE)
 		new_token->type = LITERAL;
 	else if (len == 2)
 		new_token->type = get_operator_token_type(chars);
