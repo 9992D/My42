@@ -6,7 +6,7 @@
 /*   By: adenny <adenny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/15 23:16:34 by adenny            #+#    #+#             */
-/*   Updated: 2025/06/15 23:34:32 by adenny           ###   ########.fr       */
+/*   Updated: 2025/06/25 01:07:29 by adenny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,48 +31,45 @@ t_character	*add_char_node(t_charbuilder *b, char c, int type, int word)
 	return (node);
 }
 
-int	handle_quote_inner(const char **str, t_charbuilder *b, char quote)
+int		handle_quote(const char **str, t_charbuilder *b)
 {
-	t_character	*node;
+	char	quote;
+	int		keep;
 
-	b->state.word++;
+	quote = **str;
+	keep = !b->state.in_word;
+	if (!b->state.in_word)
+	{
+		b->state.word++;
+		b->state.in_word = 1;
+	}
+	if (keep)
+	{
+		if (!add_char_node(b, quote, LITERAL, b->state.word))
+			return (0);
+	}
+	(*str)++;
 	while (**str && **str != quote)
 	{
-		node = add_char_node(b, **str, LITERAL, b->state.word);
-		if (!node)
+		if (!add_char_node(b, **str, LITERAL, b->state.word))
 			return (0);
 		(*str)++;
 	}
 	if (**str == quote)
 	{
-		b->state.word++;
-		node = add_char_node(b, quote, get_character_type(quote),
-				b->state.word);
-		if (!node)
-			return (0);
-		(*str)++;
+		if (keep)
+		{
+			if (!add_char_node(b, quote, LITERAL, b->state.word))
+				return (0);
+		}
 	}
 	return (1);
 }
 
-int	handle_quote(const char **str, t_charbuilder *b)
-{
-	char	quote;
-
-	quote = **str;
-	b->state.word++;
-	if (!add_char_node(b, quote, get_character_type(quote), b->state.word))
-		return (0);
-	(*str)++;
-	if (!handle_quote_inner(str, b, quote))
-		return (0);
-	return (1);
-}
-
-int	handle_non_space(const char **str, t_charbuilder *b)
+int		handle_non_space(const char **str, t_charbuilder *b)
 {
 	char	c;
-	int		type;
+	int	type;
 
 	c = **str;
 	type = get_character_type(c);
@@ -97,14 +94,12 @@ int	handle_non_space(const char **str, t_charbuilder *b)
 	return (1);
 }
 
-int	handle_char(const char **str, t_charbuilder *b)
+int		handle_char(const char **str, t_charbuilder *b)
 {
-	if (**str == 34 || **str == 39)
+	if (**str == '\'' || **str == '"')
 	{
 		if (!handle_quote(str, b))
 			return (0);
-		b->state.in_word = 0;
-		b->state.last_op = 0;
 	}
 	else if (!ft_isspace(**str))
 	{
