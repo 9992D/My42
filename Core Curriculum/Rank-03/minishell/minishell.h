@@ -28,7 +28,7 @@ typedef enum e_type
     HEREDOC,
     REDIR_OUT,
     APPEND,
-    DOLLAR,
+    VARIABLE,
     QUOTE,
     DOUBLE_QUOTE,
     UNKNOWN,
@@ -74,6 +74,7 @@ t_character	*add_char_node(t_charbuilder *b, char c, int type, int word);
 int	handle_quote(const char **str, t_charbuilder *b);
 int	handle_non_space(const char **str, t_charbuilder *b);
 int	handle_char(const char **str, t_charbuilder *b);
+int handle_dollar(const char **str, t_charbuilder *b);
 
 // Character functions
 t_type get_character_type(char c);

@@ -6,7 +6,7 @@
 /*   By: adenny <adenny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/15 23:07:44 by adenny            #+#    #+#             */
-/*   Updated: 2025/06/24 15:52:47 by adenny           ###   ########.fr       */
+/*   Updated: 2025/06/25 14:37:10 by adenny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ t_type	get_character_type(char c)
 	else if (c == '>')
 		return (REDIR_OUT);
 	else if (c == '$')
-		return (DOLLAR);
+		return (VARIABLE);
 	else if (c == 39)
 		return (QUOTE);
 	else if (c == 34)
