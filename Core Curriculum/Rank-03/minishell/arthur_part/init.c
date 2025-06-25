@@ -15,12 +15,12 @@ t_command *create_new_command(void)
     return cmd;
 }
 
-t_command *init_struct_globale(t_token *token_list)
+t_command *init_struct_globale(t_token *token_list, char **line)
 {
     t_command *cmd = create_new_command();
     if (!cmd)
         return NULL;
-    parse_token(cmd, token_list);
-    save_all(cmd, token_list);
+    parse_token(cmd, token_list, line);
+    save_all(cmd, token_list, line);
     return cmd;
 }

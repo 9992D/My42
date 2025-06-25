@@ -88,9 +88,13 @@ Test objectif :
 
 ->besoin que le pre-traitement fasse : 1 seul token si il y a des quotes | enregistrer en tant que variable si dollars + regles
 
+->parser si vraiment une variable ou non :
 minishell$ " '$USER' " -> $USER reste type VARIABLE
 minishell$ ' "$USER" ' -> $USER devient LITERAL
 
-->parser si quotes ouvertes et jamais fermees quitter
+->parser si quotes ouvertes et jamais fermees quitter :
 
- 
+ verfier amaury a bien plusieurs token si : " je suis $USER quelqu'un "
+
+
+-> cleanup_and_exit -> quitter proprement

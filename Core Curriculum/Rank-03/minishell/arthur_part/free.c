@@ -42,10 +42,10 @@ void cleanup(t_command *cmd)
     }
 }
 
-void cleanall_exit(t_command *cmd, t_token *token_list)
+void cleanall_exit(t_command *cmd, t_token *token_list, char **line)
 {
     cleanup(cmd);
     free_token_list(token_list);
-    // free(line); LEAKS OBLIGATOIRE pour l'instant car line de readline n'est pas free
-    exit(EXIT_FAILURE);
+    free(*line);
+    *line = readline("minishell$ ");
 }

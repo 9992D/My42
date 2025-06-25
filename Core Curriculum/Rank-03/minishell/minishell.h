@@ -129,11 +129,10 @@ t_token *convert_to_tokens(t_character *chars);
 
 // init.c 
 t_command *create_new_command(void);
-t_command *init_struct_globale(t_token *token_list);
+t_command *init_struct_globale(t_token *token_list, char **line);
 
 // parse_token.c
-void        parse_token(t_command *cmd, t_token *token_list);
-
+void      parse_token(t_command *cmd, t_token *token_list, char **line);
 // utils.c
 void        *lst_last_node(void *head);
 int         is_redir (t_type type);
@@ -143,10 +142,10 @@ t_type_cmd  identify_builtin(const char *str);
 
 // free.c
 void        cleanup (t_command *cmd);
-void        cleanall_exit(t_command *cmd, t_token *token_list);
+void        cleanall_exit(t_command *cmd, t_token *token_list, char **line);
 
 // cmd.c
-void save_all(t_command *cmd, t_token *token_list);
+void save_all(t_command *cmd, t_token *token_list, char **line);
 
 
 

@@ -63,7 +63,7 @@ int add_argument(t_command *cmd, t_type type, const char *str)
 }
 
 
-void save_all(t_command *cmd, t_token *token_list)
+void save_all(t_command *cmd, t_token *token_list, char **line)
 {
     t_command *current = cmd;
 
@@ -103,12 +103,12 @@ void save_all(t_command *cmd, t_token *token_list)
             if (current->cmd == CMD_NONE)
             {
                 if (!add_cmd(current, token_list->str))
-                    cleanall_exit(current, token_list);
+                    cleanall_exit(current, token_list, line);
             }
             else
             {
                 if (!add_argument(current, token_list->type, token_list->str))
-                    cleanall_exit(current, token_list);
+                    cleanall_exit(current, token_list, line);
             }
             token_list = token_list->next;
         }
@@ -116,7 +116,7 @@ void save_all(t_command *cmd, t_token *token_list)
         else 
         {
             if(!add_argument(current, token_list->type, token_list->str))
-                cleanall_exit(current, token_list);
+                cleanall_exit(current, token_list, line);
             token_list = token_list->next;
             continue;
         }
@@ -124,51 +124,3 @@ void save_all(t_command *cmd, t_token *token_list)
     }
 }
 
-
-
-        // else if (token_list->type == LITERAL)
-        // {
-        //     if (add_cmd(current, token_list->str))
-        //     {
-        //         token_list = token_list->next;
-        //         continue;
-        //     }
-        //     add_argument(current, token_list->str);
-        // }
-
-        // else
-        //     add_argument(current, token_list->str);
-
-        // token_list = token_list->next;
-
-
-
-// static void add_argument(t_command *cmd, char *arg)
-// {
-//     int i = 0;
-//     int j = 0;
-//     char **new_args;
-
-//     if (cmd->cmd == NOT_BUILTIN)
-//         return;
-
-//     if (!cmd->args)
-//     {
-//         cmd->args = malloc(sizeof(char *) * 2);
-//         cmd->args[0] = strdup(arg);
-//         cmd->args[1] = NULL;
-//         return;
-//     }
-//     while (cmd->args[i])
-//         i++;
-//     new_args = malloc(sizeof(char *) * (i + 2));
-//     while (j < i) 
-//     { 
-//         new_args[j] = cmd->args[j];
-//         j++;
-//     }
-//     new_args[i] = strdup(arg);
-//     new_args[i + 1] = NULL;
-//     free(cmd->args);
-//     cmd->args = new_args;
-// }
