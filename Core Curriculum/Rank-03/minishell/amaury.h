@@ -16,7 +16,6 @@
 #include <termios.h>
 #include <sys/ioctl.h>
 #include <term.h>
-#include <stddef.h>
 
 typedef enum e_type
 {
@@ -33,57 +32,20 @@ typedef enum e_type
     UNKNOWN,
 }	t_type;
 
-
 typedef struct s_character
 {
     char			c;
     t_type			type;
-    int             word;
+    int word;
     struct s_character *next;
 } t_character;
 
 typedef struct s_token
 {
-    char            *str;
-    t_type          type;
-    struct s_token  *next;
+    char *str;
+    t_type type;
+    struct s_token *next;
 } t_token;
-
-typedef struct s_redir {
-    t_type  type;
-    char    *target;
-    int     error;
-    struct  s_redir *next;
-} t_redir;
-
-typedef enum e_cmd
-{
-    CMD_NONE,
-	T_ECHO,
-    T_CD,
-    T_PWD,
-    T_EXPORT,
-    T_UNSET,
-    T_ENV,
-    T_EXIT,
-    NOT_BUILTIN,
-}	t_type_cmd;
-
-typedef struct s_arg
-{
-    char            *str;
-    t_type          type;
-} t_arg;
-
-typedef struct s_command {
-    t_type_cmd          cmd;          // enum de la commande (si pas trouve alors = NOT_BUILTIN)
-    t_arg               *args;        // tableau de t_arg (execve attend un tableau char *argv[] terminé par NULL)
-    size_t              nb_args;
-    t_redir             *redirs;      // liste chainee de redirection (noeud contenant error si pas de target, la target est enregistree dans le noeud)             
-    int                 has_pipe_out; 
-    struct s_command    *next;
-    struct s_command    *previous; 
-} t_command;
 
 typedef struct s_build_state
 {
@@ -124,27 +86,5 @@ int get_word_len(t_character *chars, int word);
 char *build_token_string(t_character *chars, int len);
 t_type get_operator_token_type(t_character *chars);
 t_token *convert_to_tokens(t_character *chars);
-
-// init.c 
-t_command *create_new_command(void);
-t_command *init_struct_globale(t_token *token_list, char **line);
-
-// parse_token.c
-void      parse_token(t_command *cmd, t_token *token_list, char **line);
-// utils.c
-void        *lst_last_node(void *head);
-int         is_redir (t_type type);
-int         is_operator(t_type type);
-int         is_command(t_type_cmd type);
-t_type_cmd  identify_builtin(const char *str);
-
-// free.c
-void        cleanup (t_command *cmd);
-void        cleanall_exit(t_command *cmd, t_token *token_list, char **line);
-
-// cmd.c
-void save_all(t_command *cmd, t_token *token_list, char **line);
-
-
 
 #endif

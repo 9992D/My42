@@ -6,7 +6,7 @@
 /*   By: adenny <adenny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/15 23:13:49 by adenny            #+#    #+#             */
-/*   Updated: 2025/06/15 23:36:22 by adenny           ###   ########.fr       */
+/*   Updated: 2025/06/25 14:53:34 by adenny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ t_token	*create_token_from_chars(t_character *chars, int word_id)
 	}
 	if (chars->type == LITERAL)
 		new_token->type = LITERAL;
+	else if (chars->type == VARIABLE)
+		new_token->type = VARIABLE;
 	else if (len == 2)
 		new_token->type = get_operator_token_type(chars);
 	else if (len > 2)

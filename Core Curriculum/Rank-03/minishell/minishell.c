@@ -22,16 +22,14 @@ const char *get_type_name(t_type type)
     {
         case LITERAL:      return "LITERAL";
         case PIPE:         return "PIPE";
+        case OR:           return "or";
+        case AMPERSAND:    return "ampersand";
+        case AND:          return "and";
         case REDIR_IN:     return "<";
         case HEREDOC:      return "<<";
         case REDIR_OUT:    return ">";
         case APPEND:       return ">>";
-        case OR:           return "or";
-        case AMPERSAND:    return "ampersand";
-        case AND:          return "and";
-        case DOLLAR:       return "dollar";
-        case QUOTE:        return "quote";
-        case DOUBLE_QUOTE: return "double_quote";
+        case VARIABLE:        return "variable";
         default:           return "UNKNOWN";
     }
 }

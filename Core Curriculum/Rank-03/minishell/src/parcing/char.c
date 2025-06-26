@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   char.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adenny <adenny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: alandel <alandel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/15 23:07:44 by adenny            #+#    #+#             */
-/*   Updated: 2025/06/15 23:23:01 by adenny           ###   ########.fr       */
+/*   Updated: 2025/06/26 10:57:55 by alandel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,7 @@ t_type	get_character_type(char c)
 	else if (c == '>')
 		return (REDIR_OUT);
 	else if (c == '$')
-		return (DOLLAR);
-	else if (c == 39)
-		return (QUOTE);
-	else if (c == 34)
-		return (DOUBLE_QUOTE);
+		return (VARIABLE);
 	return (UNKNOWN);
 }
 

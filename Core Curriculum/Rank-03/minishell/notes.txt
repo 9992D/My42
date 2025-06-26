@@ -100,4 +100,5 @@ minishell$ ' "$USER" ' -> $USER devient LITERAL
 -> cleanup_and_exit -> quitter proprement       OK
 -> gerer les dollars dans quotes double (dans save_all fractionner le token)
 -> remplacer par les fonctiosn de la Libft
--> finir parse_token (gestion des quotes)
+-> finir parse_token (suppression des quotes externes + )
+-> proteger proprement les fonctions (ex : return malloc echoue de add_redir) (funcheck)
