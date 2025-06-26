@@ -97,4 +97,7 @@ minishell$ ' "$USER" ' -> $USER devient LITERAL
  verfier amaury a bien plusieurs token si : " je suis $USER quelqu'un "
 
 
--> cleanup_and_exit -> quitter proprement
+-> cleanup_and_exit -> quitter proprement       OK
+-> gerer les dollars dans quotes double (dans save_all fractionner le token)
+-> remplacer par les fonctiosn de la Libft
+-> finir parse_token (gestion des quotes)

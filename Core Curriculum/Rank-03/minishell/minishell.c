@@ -145,7 +145,7 @@ int main(void)
             
 
         /* 5) cleanup */
-        cleanup(cmd_list, line);
+        cleanup(cmd_list);
         free_token_list(token_list);
         // free_character_list(char_list);
         free(line);
