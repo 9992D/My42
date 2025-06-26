@@ -6,7 +6,7 @@
 /*   By: alandel <alandel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/26 11:36:20 by alandel           #+#    #+#             */
-/*   Updated: 2025/06/26 12:15:09 by alandel          ###   ########.fr       */
+/*   Updated: 2025/06/26 13:10:54 by alandel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,22 +90,37 @@ int	handle_pipe(t_token **token_list, t_command **current)
 
 int	handle_redir(t_token **token_list, t_command **current)
 {
-	if (is_redir(token_list->type))
+	if (is_redir((*token_list)->type))
 	{
-		if (token_list->next && token_list->next->type == LITERAL)
+		if ((*token_list)->next && (*token_list)->next->type == LITERAL)
 		{
-			add_redir(current, token_list->type, token_list->next->str);
-			token_list = token_list->next->next;
+			add_redir(*current, (*token_list)->type, (*token_list)->next->str);
+			*token_list = (*token_list)->next->next;
 			return (1);
 		}
 		else
 		{
-			add_redir(current, token_list->type, NULL);
-			token_list = token_list->next;
+			add_redir(*current, (*token_list)->type, NULL);
+			*token_list = (*token_list)->next;
 			return (1);
 		}
 	}
 	return (0);
+}
+
+void	handle_cmd_n_arg(t_token **token_list, t_command **current)
+{
+	if ((*current)->cmd == CMD_NONE)
+	{
+		if (!add_cmd(*current, (*token_list)->str))
+			cleanall_exit(*current, (*token_list), line);
+	}
+	else
+	{
+		if (!add_argument(*current, (*token_list)->type, (*token_list)->str))
+			cleanall_exit(*current, *token_list, line);
+	}
+	*token_list = (*token_list)->next;
 }
 
 void	save_all(t_command *cmd, t_token *token_list, char **line)
@@ -120,19 +135,7 @@ void	save_all(t_command *cmd, t_token *token_list, char **line)
 		if (handle_redir(&token_list, &current))
 			continue ;
 		else if (token_list->type == LITERAL || token_list->type == VARIABLE)
-		{
-			if (current->cmd == CMD_NONE)
-			{
-				if (!add_cmd(current, token_list->str))
-					cleanall_exit(current, token_list, line);
-			}
-			else
-			{
-				if (!add_argument(current, token_list->type, token_list->str))
-					cleanall_exit(current, token_list, line);
-			}
-			token_list = token_list->next;
-		}
+			handle_cmd_n_arg(&token_list, &current);
 		else
 		{
 			if (!add_argument(current, token_list->type, token_list->str))

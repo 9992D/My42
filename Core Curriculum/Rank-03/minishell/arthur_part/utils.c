@@ -6,7 +6,7 @@
 /*   By: alandel <alandel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/26 11:36:06 by alandel           #+#    #+#             */
-/*   Updated: 2025/06/26 11:53:45 by alandel          ###   ########.fr       */
+/*   Updated: 2025/06/26 13:00:39 by alandel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,6 @@ t_type_cmd	identify_builtin(const char *str)
 	if (strcmp(str, "env") == 0)
 		return (T_ENV);
 	if (strcmp(str, "exit") == 0)
-		return T_EXIT;
-	return NOT_BUILTIN;
+		return (T_EXIT);
+	return (NOT_BUILTIN);
 }
