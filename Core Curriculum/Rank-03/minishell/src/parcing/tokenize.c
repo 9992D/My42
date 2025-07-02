@@ -6,7 +6,7 @@
 /*   By: adenny <adenny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/15 23:23:35 by adenny            #+#    #+#             */
-/*   Updated: 2025/06/15 23:52:35 by adenny           ###   ########.fr       */
+/*   Updated: 2025/07/02 21:10:10 by adenny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ t_character	*build_token_list(const char *str)
 	{
 		if (!handle_char(&str, &b))
 			return (free_character_list(b.head), NULL);
-		str++;
 	}
 	return (b.head);
 }

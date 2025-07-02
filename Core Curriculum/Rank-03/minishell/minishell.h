@@ -54,6 +54,7 @@ typedef struct s_build_state
 	int		in_word;
 	int		word;
 	char	last_op;
+    char    in_quote;
 }	t_build_state;
 
 typedef struct s_charbuilder

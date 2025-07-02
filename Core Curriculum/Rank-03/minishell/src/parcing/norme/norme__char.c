@@ -6,7 +6,7 @@
 /*   By: adenny <adenny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/15 23:16:34 by adenny            #+#    #+#             */
-/*   Updated: 2025/06/25 16:36:24 by adenny           ###   ########.fr       */
+/*   Updated: 2025/07/02 21:53:35 by adenny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,92 +31,99 @@ t_character	*add_char_node(t_charbuilder *b, char c, int type, int word)
 	return (node);
 }
 
-int		handle_quote(const char **str, t_charbuilder *b)
+int handle_char(const char **str, t_charbuilder *b)
 {
-	char	quote;
-	int		keep;
-
-	quote = **str;
-	keep = !b->state.in_word;
-	if (!b->state.in_word)
-	{
-		b->state.word++;
-		b->state.in_word = 1;
-	}
-	if (keep)
-	{
-		if (!add_char_node(b, quote, LITERAL, b->state.word))
-			return (0);
-	}
-	(*str)++;
-	while (**str && **str != quote)
-	{
-		if (!add_char_node(b, **str, LITERAL, b->state.word))
-			return (0);
-		(*str)++;
-	}
-	if (**str == quote)
-	{
-		if (keep)
-		{
-			if (!add_char_node(b, quote, LITERAL, b->state.word))
-				return (0);
-		}
-	}
-	return (1);
+    // 1. Espace (hors quote) -> termine le mot courant
+    if (ft_isspace(**str)) {
+        b->state.in_word = 0;
+        b->state.in_quote = 0;
+        b->state.last_op = 0;
+        (*str)++;
+        return 1;
+    }
+    // 2. Quotes : on commence TOUJOURS un nouveau token pour chaque quote ouvrante
+    else if (**str == '\'' || **str == '"') {
+        b->state.word++;
+        b->state.in_word = 1;
+        b->state.in_quote = **str;
+        return handle_quote(str, b);
+    }
+    // 3. Dollar
+    else if (**str == '$') {
+        if (!b->state.in_word) {
+            b->state.word++;
+            b->state.in_word = 1;
+        }
+        return handle_dollar(str, b);
+    }
+    // 4. Opérateurs spéciaux
+    else if (get_character_type(**str) != LITERAL) {
+        b->state.word++;
+        b->state.in_word = 1;
+        b->state.last_op = **str;
+        if (!add_char_node(b, **str, get_character_type(**str), b->state.word))
+            return 0;
+        (*str)++;
+        return 1;
+    }
+    // 5. Caractère normal : commence un nouveau mot si on n'est pas déjà dans un mot
+    else {
+        if (!b->state.in_word) {
+            b->state.word++;
+            b->state.in_word = 1;
+        }
+        if (!add_char_node(b, **str, LITERAL, b->state.word))
+            return 0;
+        (*str)++;
+    }
+    return 1;
 }
 
-int		handle_non_space(const char **str, t_charbuilder *b)
+int handle_quote(const char **str, t_charbuilder *b)
 {
-	char	c;
-	int	type;
+    char quote = **str;
+    (*str)++;
 
-	c = **str;
-	type = get_character_type(c);
-	if (type == LITERAL)
-	{
-		if (!b->state.in_word)
-		{
-			b->state.word++;
-			b->state.in_word = 1;
-		}
-		b->state.last_op = 0;
-	}
-	else
-	{
-		if (!b->state.in_word || b->state.last_op != c)
-			b->state.word++;
-		b->state.in_word = 1;
-		b->state.last_op = c;
-	}
-	if (!add_char_node(b, c, type, b->state.word))
-		return (0);
-	return (1);
+    while (**str && **str != quote) {
+        if (!add_char_node(b, **str, LITERAL, b->state.word))
+            return 0;
+        (*str)++;
+    }
+    if (**str == quote)
+        (*str)++;
+
+    b->state.in_word = 0;
+    b->state.in_quote = 0;
+    return 1;
 }
 
-int		handle_char(const char **str, t_charbuilder *b)
+int handle_non_space(const char **str, t_charbuilder *b)
 {
-	if (**str == '$')
-	{
-		if (!handle_dollar(str, b))
-			return (0);
-	}	
-	if (**str == '\'' || **str == '"')
-	{
-		if (!handle_quote(str, b))
-			return (0);
-	}
-	else if (!ft_isspace(**str))
-	{
-		if (!handle_non_space(str, b))
-			return (0);
-	}
-	else
-	{
-		b->state.in_word = 0;
-		b->state.last_op = 0;
-	}
-	return (1);
+    char    c = **str;
+    int     type = get_character_type(c);
+
+    if (!b->state.in_quote)
+    {
+        if (type == LITERAL)
+        {
+            if (!b->state.in_word)
+            {
+                b->state.word++;
+                b->state.in_word = 1;
+            }
+            b->state.last_op = 0;
+        }
+        else
+        {
+            if (!b->state.in_word || b->state.last_op != c)
+                b->state.word++;
+            b->state.in_word = 1;
+            b->state.last_op = c;
+        }
+    }
+    if (!add_char_node(b, c, type, b->state.word))
+        return (0);
+    return (1);
 }
 
 static int is_name_char(char c)
