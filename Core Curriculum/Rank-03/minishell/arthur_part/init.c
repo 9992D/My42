@@ -6,7 +6,7 @@
 /*   By: alandel <alandel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/26 11:36:13 by alandel           #+#    #+#             */
-/*   Updated: 2025/06/26 11:36:14 by alandel          ###   ########.fr       */
+/*   Updated: 2025/07/03 14:37:03 by alandel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ t_command	*create_new_command(void)
 	if (!cmd)
 		return (NULL);
 	cmd->cmd = CMD_NONE;
+	cmd->not_builtin = NULL;
 	cmd->args = NULL;
 	cmd->nb_args = 0;
 	cmd->redirs = NULL;
@@ -37,7 +38,7 @@ t_command	*init_struct_globale(t_token *token_list, char **line)
 	if (!cmd)
 		return (NULL);
 	if (parse_token(cmd, token_list, line))
-		return NULL;
+		return (NULL);
 	save_all(cmd, token_list, line);
 	return (cmd);
 }

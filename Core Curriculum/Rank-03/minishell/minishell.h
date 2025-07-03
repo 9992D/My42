@@ -78,7 +78,8 @@ typedef struct s_arg
 } t_arg;
 
 typedef struct s_command {
-    t_type_cmd          cmd;
+    t_type_cmd          cmd;          // il faut enregistrer la string meme si pas builtin 
+    char                *not_builtin; // utile si jai un "ls" qui nest pas un builtin mais qui doit quand meme etre enregistre pour etre verifie par la suite
     t_arg               *args;        // tableau de t_arg (execve attend un tableau char *argv[] terminé par NULL)
     size_t              nb_args;
     t_redir             *redirs;      // liste chainee de redirection (noeud contenant error si pas de target, la target est enregistree dans le noeud)             

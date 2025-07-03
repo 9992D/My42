@@ -6,7 +6,7 @@
 /*   By: alandel <alandel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/26 11:36:20 by alandel           #+#    #+#             */
-/*   Updated: 2025/06/26 13:10:54 by alandel          ###   ########.fr       */
+/*   Updated: 2025/07/03 13:57:31 by alandel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,10 @@ static int	add_cmd(t_command *cmd, char *str)
 	if (cmd->cmd == CMD_NONE)
 	{
 		cmd->cmd = identify_builtin(str);
+		if (cmd->cmd == NOT_BUILTIN)
+			cmd->not_builtin = strdup(str);
 		return (1);
-	}
+	}	
 	return (0);
 }
 
