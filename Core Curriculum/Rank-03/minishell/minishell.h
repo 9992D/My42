@@ -29,6 +29,8 @@ typedef enum e_type
     HEREDOC,
     REDIR_OUT,
     APPEND,
+    QUOTE,
+    DOUBLE_QUOTE,
     VARIABLE,
     UNKNOWN,
 }	t_type;
