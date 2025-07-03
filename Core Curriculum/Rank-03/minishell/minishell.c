@@ -130,13 +130,8 @@ int main(void)
         /* 3) parsing & construction des t_command */
         t_command *cmd_list = init_struct_globale(token_list, &line);
         if (!cmd_list)
-        {
-            fprintf(stderr, "Error parsing command list.\n");
-            free_token_list(token_list);
-            free_character_list(char_list);
-            free(line);
             continue;
-        }
+        
 
         /* 4) affichage de la structure interne */
         print_command_structure(cmd_list);

@@ -76,7 +76,7 @@ typedef struct s_arg
 } t_arg;
 
 typedef struct s_command {
-    t_type_cmd          cmd;          // enum de la commande (si pas trouve alors = NOT_BUILTIN)
+    t_type_cmd          cmd;
     t_arg               *args;        // tableau de t_arg (execve attend un tableau char *argv[] terminé par NULL)
     size_t              nb_args;
     t_redir             *redirs;      // liste chainee de redirection (noeud contenant error si pas de target, la target est enregistree dans le noeud)             
@@ -130,7 +130,7 @@ t_command *create_new_command(void);
 t_command *init_struct_globale(t_token *token_list, char **line);
 
 // parse_token.c
-void      parse_token(t_command *cmd, t_token *token_list, char **line);
+int      parse_token(t_command *cmd, t_token *token_list, char **line);
 // utils.c
 void        *lst_last_node(void *head);
 int         is_redir (t_type type);

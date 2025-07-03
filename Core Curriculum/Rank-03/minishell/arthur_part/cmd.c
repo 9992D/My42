@@ -108,7 +108,7 @@ int	handle_redir(t_token **token_list, t_command **current)
 	return (0);
 }
 
-void	handle_cmd_n_arg(t_token **token_list, t_command **current)
+static void	handle_cmd_n_arg(t_token **token_list, t_command **current, char **line)
 {
 	if ((*current)->cmd == CMD_NONE)
 	{
@@ -135,7 +135,7 @@ void	save_all(t_command *cmd, t_token *token_list, char **line)
 		if (handle_redir(&token_list, &current))
 			continue ;
 		else if (token_list->type == LITERAL || token_list->type == VARIABLE)
-			handle_cmd_n_arg(&token_list, &current);
+			handle_cmd_n_arg(&token_list, &current, line);
 		else
 		{
 			if (!add_argument(current, token_list->type, token_list->str))

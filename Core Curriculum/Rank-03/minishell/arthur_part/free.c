@@ -36,7 +36,11 @@ void	free_args(t_arg *args, size_t nb_args)
 	if (!args)
 		return ;
 	while (i < nb_args)
-		free(args[i++].str);
+	{
+		if (args[i].str)	
+			free(args[i++].str);
+		i++;
+	}
 	free(args);
 }
 
@@ -60,6 +64,10 @@ void	cleanall_exit(t_command *cmd, t_token *token_list, char **line)
 {
 	cleanup(cmd);
 	free_token_list(token_list);
-	free(*line);
-	*line = readline("minishell$ ");
+	if (*line)
+	{
+		free(*line);
+		*line = NULL;
+	}
+	// *line = readline("minishell$ ");
 }

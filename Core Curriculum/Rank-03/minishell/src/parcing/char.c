@@ -1,38 +1,32 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   char.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: alandel <alandel@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/15 23:07:44 by adenny            #+#    #+#             */
-/*   Updated: 2025/06/26 10:57:55 by alandel          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../../minishell.h"
 
-t_type	get_character_type(char c)
+t_type get_character_type(char c)
 {
-	if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0'
-			&& c <= '9') || c == '.' || c == '/' || c == '_')
-		return (LITERAL);
+	if ((c >= 'a' && c <= 'z') || 
+	    (c >= 'A' && c <= 'Z') || 
+	    (c >= '0' && c <= '9')||
+		c == '.' || c == '/' || c == '_')
+		return LITERAL;
 	else if (c == '|')
-		return (PIPE);
+		return PIPE;
 	else if (c == '&')
-		return (AMPERSAND);
+		return AMPERSAND;
 	else if (c == '<')
-		return (REDIR_IN);
+		return REDIR_IN;
 	else if (c == '>')
-		return (REDIR_OUT);
+		return REDIR_OUT;
 	else if (c == '$')
-		return (VARIABLE);
-	return (UNKNOWN);
+		return DOLLAR;
+	else if (c == 39)
+		return QUOTE;
+	else if (c == 34)
+		return DOUBLE_QUOTE;
+	return UNKNOWN;
 }
 
 void	free_character_list(t_character *head)
 {
-	t_character	*tmp;
+	t_character *tmp;
 
 	while (head)
 	{
@@ -42,21 +36,18 @@ void	free_character_list(t_character *head)
 	}
 }
 
-int	malloc_structure_character(t_character **t, int n)
+int malloc_structure_character(t_character **t, int n)
 {
-	t_character	*head;
-	t_character	*curr;
-	t_character	*new;
+	t_character *head = NULL;
+	t_character *curr = NULL;
 
-	head = NULL;
-	curr = NULL;
-	while (n-- > 0)
+	while (n > 0)
 	{
-		new = malloc(sizeof(t_character));
+		t_character *new = malloc(sizeof(t_character));
 		if (!new)
 		{
 			free_character_list(head);
-			return (0);
+			return 0;
 		}
 		new->c = 0;
 		new->type = UNKNOWN;
@@ -65,8 +56,10 @@ int	malloc_structure_character(t_character **t, int n)
 			head = new;
 		else
 			curr->next = new;
+
 		curr = new;
+		n--;
 	}
 	*t = head;
-	return (1);
+	return 1;
 }
